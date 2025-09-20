@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = GeneratorPage();
         break;
       case 1:
-        page = Placeholder();
+        page = FavoritesPage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
@@ -70,6 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           SafeArea(
             child: NavigationRail(
+              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              indicatorColor: Colors.amber,
               extended: false,
               destinations: [
                 NavigationRailDestination(
@@ -165,6 +167,29 @@ class BigCard extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Text(pair.asLowerCase, style: style),
       ),
+    );
+  }
+}
+
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    var favs = appState.favorites;
+
+    return ListView.builder(
+      itemCount: favs.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: const Icon(Icons.favorite),
+          title: Text(favs[index].asLowerCase),
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("You tapped ${favs[index].asLowerCase}")),
+            );
+          },
+        );
+      },
     );
   }
 }
